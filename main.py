@@ -47,9 +47,11 @@ def send_message (msg, numbers=NUMBERS):
 
     for number in numbers:
         message = client.messages.create(
-            body=msg,
+            body='Happy sloth day!',
+            media_url=[msg],
             from_='+17344363993',
             to=number,
         )
+        message.media(msg)
 
 giphy()

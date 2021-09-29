@@ -15,6 +15,7 @@ TWILIO = FILE_BASE + '/.twilio'
 
 NUMBERS = [
     '+17343584745',
+    '+17343301543'
 ]
 
 def giphy(search='sloth'):
@@ -47,11 +48,15 @@ def send_message (msg, numbers=NUMBERS):
 
     for number in numbers:
         message = client.messages.create(
-            body='Happy sloth day!',
+            body='',
             media_url=[msg],
             from_='+17344363993',
             to=number,
         )
         message.media(msg)
 
-giphy()
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('-s', '--search', default='sloth')
+args = parser.parse_args()
+giphy(args.search)

@@ -18,7 +18,7 @@ NUMBERS = [
     '+17343301543'
 ]
 
-def giphy(search, message):
+def giphy(search, message, skip):
     response = requests.get('http://api.giphy.com/v1/gifs/search?q=' + search + '&api_key=TwtbpypGfzohlVWSNGg3m2xjpctAadad&limit=10')
     data = json.loads(response.text)
     num_choices = len(data['data'])
@@ -37,12 +37,15 @@ def giphy(search, message):
         if args.message:
             send_message(gif['images']['original']['url'])
             print(colored('Sent new GIF {}'.format(gif['id']), 'green'))
+        else:
+            print(colored('Would have sent {}'.format(gif['url']), 'yellow'))
+        
+        if args.message or args.skip:
             sent.append(gif['id'])
             ofile = open(SENT_FILE, 'w')
             ofile.write('\n'.join(sent))
             ofile.close()
-        else:
-            print(colored('Would have sent {}'.format(gif['url']), 'yellow'))
+
         break
 
 def send_message (msg, numbers=NUMBERS):
@@ -62,6 +65,7 @@ def send_message (msg, numbers=NUMBERS):
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-s', '--search', default='sloth')
+parser.add_argument('--skip', action='store_true')
 parser.add_argument('-m', '--message', action='store_true')
 args = parser.parse_args()
-giphy(args.search, args.message)
+giphy(args.search, args.message, args.skip)
